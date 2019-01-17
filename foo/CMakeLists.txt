@@ -26,6 +26,13 @@ elseif(UNIX)
 	)
 endif()
 
+file(GLOB_RECURSE  SOURCES_CPP "src/*.cpp")
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Source Files"  FILES ${SOURCES_CPP})
+
+file(GLOB_RECURSE  SOURCES_HEADER_PUB "src/*.h" )
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Header Files"  FILES ${SOURCES_HEADER_PUB})
+
+
 target_include_directories(foo
     PUBLIC
         $<INSTALL_INTERFACE:include>
