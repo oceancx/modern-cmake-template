@@ -8,8 +8,13 @@ endif()
 #add_subdirectory(dependency/bar)
 find_package(Bar) 
 
+file(GLOB Foo_PUBLIC_HEADERS "include/*.h" "include/*.hpp" "include/*.inl")
+file(GLOB Foo_PRIVATE_HEADERS "include/*.h" "include/*.hpp" "include/*.inl")
+
 add_library(foo
-	src/foo.cpp
+    src/foo.cpp
+    ${Foo_PUBLIC_HEADERS}
+    ${Foo_RPIVATE_HEADERS}
 )
 if(WIN32)
 	target_sources(foo PRIVATE    
