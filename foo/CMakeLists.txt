@@ -46,50 +46,8 @@ endif()
 target_compile_features(foo PUBLIC cxx_std_11)
 target_link_libraries(foo PUBLIC Bar::Bar)
 
-set(PROJ_CONFIG_DIR lib/cmake/foo)
-set(PROJ_EXPORT_NAME Foo)
-set(PROJ_EXPORT_NAMESPACE Foo::)
-set(PROJ_TARGET foo)
-add_library("${PROJ_EXPORT_NAMESPACE}${PROJ_EXPORT_NAME}" ALIAS foo)
-set_target_properties(${PROJ_TARGET} PROPERTIES EXPORT_NAME ${PROJ_EXPORT_NAME})
-
-install(TARGETS ${PROJ_TARGET}
-    EXPORT  ${PROJ_EXPORT_NAME}Targets
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include
-)
-
-install(DIRECTORY include/ DESTINATION include)
-install(EXPORT ${PROJ_EXPORT_NAME}Targets
-    FILE
-        ${PROJ_EXPORT_NAME}Targets.cmake 
-    NAMESPACE
-        ${PROJ_EXPORT_NAMESPACE}
-    DESTINATION
-        ${PROJ_CONFIG_DIR}
-)
-
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJ_EXPORT_NAME}ConfigVersion.cmake
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY AnyNewerVersion
-)
-
-configure_package_config_file(${PROJ_EXPORT_NAME}Config.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJ_EXPORT_NAME}Config.cmake
-    INSTALL_DESTINATION ${PROJ_CONFIG_DIR}
-)
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJ_EXPORT_NAME}Config.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJ_EXPORT_NAME}ConfigVersion.cmake
-    DESTINATION ${PROJ_CONFIG_DIR}
-)
-
-export(EXPORT ${PROJ_EXPORT_NAME}Targets FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJ_EXPORT_NAME}Targets.cmake  NAMESPACE ${PROJ_EXPORT_NAMESPACE})
-export(PACKAGE ${PROJ_EXPORT_NAME})
+include(cmake/HelperMacroFunction.cmake)
+export_library_macro(foo Foo Foo:: lib/cmake/foo)
 
 add_executable(foox src/main.cpp)
 target_link_libraries(foox foo)
