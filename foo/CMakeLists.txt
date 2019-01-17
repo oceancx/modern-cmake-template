@@ -9,7 +9,7 @@ endif()
 find_package(Bar) 
 
 file(GLOB Foo_PUBLIC_HEADERS "include/*.h" "include/*.hpp" "include/*.inl")
-file(GLOB Foo_PRIVATE_HEADERS "include/*.h" "include/*.hpp" "include/*.inl")
+file(GLOB Foo_PRIVATE_HEADERS "src/*.h" "src/*.hpp" "src/*.inl")
 
 add_library(foo
     src/foo.cpp
