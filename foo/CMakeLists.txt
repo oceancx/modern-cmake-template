@@ -8,13 +8,19 @@ endif()
 #add_subdirectory(dependency/bar)
 find_package(Bar) 
 
-file(GLOB Foo_PUBLIC_HEADERS "include/*.h" "include/*.hpp" "include/*.inl")
-file(GLOB Foo_PRIVATE_HEADERS "src/*.h" "src/*.hpp" "src/*.inl")
+
+file(GLOB_RECURSE  SOURCES_CPP "src/*.cpp")
+file(GLOB_RECURSE  SOURCES_HEADER_RPI "src/*.h" "src/*.hpp" "src/*.inl" )
+file(GLOB_RECURSE  SOURCES_HEADER_PUB "include/*.h" "include/*.hpp" "include/*.inl")
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Source Files"  FILES ${SOURCES_CPP})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Header Files"  FILES ${SOURCES_HEADER_RPI})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include PREFIX "Header Files\\include"  FILES ${SOURCES_HEADER_PUB})
 
 add_library(foo
+    ${SOURCES_HEADER_PUB}
+    ${SOURCES_HEADER_RPI}
     src/foo.cpp
-    ${Foo_PUBLIC_HEADERS}
-    ${Foo_RPIVATE_HEADERS}
 )
 if(WIN32)
 	target_sources(foo PRIVATE    
@@ -26,12 +32,11 @@ elseif(UNIX)
 	)
 endif()
 
-file(GLOB_RECURSE  SOURCES_CPP "src/*.cpp")
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Source Files"  FILES ${SOURCES_CPP})
-
-file(GLOB_RECURSE  SOURCES_HEADER_PUB "src/*.h" )
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Header Files"  FILES ${SOURCES_HEADER_PUB})
-
+if(MSVC)
+  target_compile_options(cxbase PRIVATE /W4 /WX)
+else
+  target_compile_options(cxbase PRIVATE -Wall -Wextra -pedantic -Werror)
+endif(MSVC)
 
 target_include_directories(foo
     PUBLIC
