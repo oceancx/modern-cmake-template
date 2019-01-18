@@ -9,7 +9,7 @@ endif()
 find_package(Bar) 
 
 file(GLOB Foo_PUBLIC_HEADERS "include/*.h" "include/*.hpp" "include/*.inl")
-file(GLOB Foo_PRIVATE_HEADERS "include/*.h" "include/*.hpp" "include/*.inl")
+file(GLOB Foo_PRIVATE_HEADERS "src/*.h" "src/*.hpp" "src/*.inl")
 
 add_library(foo
     src/foo.cpp
@@ -25,6 +25,13 @@ elseif(UNIX)
 			src/foo_posix.cpp
 	)
 endif()
+
+file(GLOB_RECURSE  SOURCES_CPP "src/*.cpp")
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Source Files"  FILES ${SOURCES_CPP})
+
+file(GLOB_RECURSE  SOURCES_HEADER_PUB "src/*.h" )
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Header Files"  FILES ${SOURCES_HEADER_PUB})
+
 
 target_include_directories(foo
     PUBLIC
