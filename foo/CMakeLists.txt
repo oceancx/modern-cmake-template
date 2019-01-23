@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(Foo VERSION 1.0.0 LANGUAGES C CXX)
 include(cmake/cotire.cmake)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/dist CACHE PATH "..." FORCE)
